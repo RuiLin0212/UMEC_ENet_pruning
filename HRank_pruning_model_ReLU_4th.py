@@ -46,7 +46,7 @@ modify_layer(9, 557, [557,112,1,1], [557,1,5,5], [112,557,1,1])
 # Block 10
 modify_layer(10, 567, [567,112,1,1], [567,1,5,5], [112,567,1,1])
 # Block 11
-modify_layer(11, 557, [588,112,1,1], [588,1,5,5], [192,588,1,1])
+modify_layer(11, 588, [588,112,1,1], [588,1,5,5], [192,588,1,1])
 # Block 12
 modify_layer(12, 735, [735,192,1,1], [735,1,5,5], [192,735,1,1])
 # Block 13
@@ -68,7 +68,7 @@ print(lite0_model)
 
 """ load model """
 # original saved file with DataParallel
-state_dict = torch.load('./HRank_checkpoint_4th.pth')
+state_dict = torch.load('./checkpoint/ReLU/4th/Fine_tune_params_5.pth')
 # create new OrderedDict that does not contain `module.`
 from collections import OrderedDict
 new_state_dict = OrderedDict()
@@ -116,7 +116,7 @@ def gen_loaders(path, BATCH_SIZE, NUM_WORKERS):
 
     return (train_loader, val_loader)
 
-train_loader, val_loader = gen_loaders('/local/ImageNet', 100, 4)
+train_loader, val_loader = gen_loaders('/data/DeepLearning/ILSVRC2012', 80, 4)
 
 
 """ Optimizer & Criterion """
@@ -140,7 +140,7 @@ def fine_tune(epoch, log_interval=200):
             print('Train Epoch: {} [{:0>5d}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch+1, batch_idx * len(data), len(train_loader.dataset),
                     100. * batch_idx * len(data) / len(train_loader.dataset), loss.detach().item()))
-    torch.save(model.state_dict(),'./Normal_checkpoint_4th_ReLU/Fine_tune_params_' + str(epoch+1) + '.pth')
+    torch.save(model.state_dict(),'./checkpoint/ReLU/4th/resume/Fine_tune_params_' + str(epoch+1) + '.pth')
             
 """ test """
 def test(epoch):
